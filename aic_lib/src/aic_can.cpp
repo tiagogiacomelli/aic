@@ -48,6 +48,11 @@ bool aic_can::init(const char *interfaceName, const int card_number, int &error_
 
     struct sockaddr_can addr;
     struct ifreq ifr;
+    struct can_filter rfilter;
+
+    rfilter.can_id = card_number;
+    rfilter.can_mask = 0x1F;
+
 
     int ret;
 
@@ -68,6 +73,10 @@ bool aic_can::init(const char *interfaceName, const int card_number, int &error_
     addr.can_ifindex = ifr.ifr_ifindex;
 
     ret = bind(socket_fd, (struct sockaddr *)&addr, sizeof(addr));
+
+    setsockopt(socket_fd, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
+
+
     if(ret)
     {
         error_code = errno;
@@ -112,7 +121,7 @@ bool aic_can::send_can_msg(struct can_frame msg, int command, bool rtr, int &err
 bool aic_can::get_can_msg(struct can_frame &frame, bool *extended, bool *rtr, bool *error, int &error_code,
                           struct timeval timeout)
 {
-  std::cout << "Reading CAN MSG\n" << std::endl;
+//  std::cout << "Reading CAN MSG\n" << std::endl;
   int NumOfBytes;
     int ret;
     fd_set rfds;

@@ -20,14 +20,12 @@ enum aic_comm_method_t {
 
 typedef struct aic_comm_config {
   std::string aic_serial_port;
-  int aic_can_id_number;
-  int aic_can_bus_number;
+  int aic_can_id_number;  
   std::string aic_can_iface;
   int aic_comm_device;  
   aic_comm_config() :
     aic_serial_port("/dev/ttyUSB0"),
     aic_can_id_number(0),
-    aic_can_bus_number(0),
     aic_can_iface("can0"),
     aic_comm_device(none) {}
 } aic_comm_config_t;

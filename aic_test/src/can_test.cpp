@@ -6,8 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    aic_comm_config_t param;
-    param.aic_can_bus_number = 0;
+    aic_comm_config_t param;    
     param.aic_can_id_number = 2;
     param.aic_can_iface = "can0";
     param.aic_comm_device = socketcan;

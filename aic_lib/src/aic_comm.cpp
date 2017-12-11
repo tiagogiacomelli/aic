@@ -19,7 +19,7 @@ int aic_comm::send_command(int command, ...)
 {
   struct can_frame msg_tx;
   msg_tx.can_id = can_bus->get_id_number() | (command << 5);
-  std::cout << "MSG_ID: " << msg_tx.can_id << "\n" << std::endl;
+//  std::cout << "MSG_ID: " << msg_tx.can_id << "\n" << std::endl;
 
   msg_tx.can_dlc = 0;
 
@@ -32,7 +32,6 @@ int aic_comm::send_command(int command, ...)
   }
 
   if (command == AIC_MOTOR_ACT) {
-    std::cout << "COMANDO AIC_MOTOR_ACT\n" << std::endl;
     va_list ap;
     va_start(ap,command);
     double volt=va_arg(ap,double);
@@ -42,7 +41,6 @@ int aic_comm::send_command(int command, ...)
       if (connection_parameters.aic_comm_device == rs232){
         serial_bus->send_serial_char((char*) &volt + i,&error_code);
 
-//      } else msg_tx.data[7-i]= *((unsigned char *) &volt + i);
       } else ((unsigned char *)(&msg_tx.data))[7-i] = ((unsigned char *)(&volt))[i];
     }
   }
@@ -87,7 +85,7 @@ int aic_comm::get_status(int command, ...)
     struct timeval timeout;
 
     timeout.tv_sec = 0;
-    timeout.tv_usec = 100000;
+    timeout.tv_usec = 300;
 
     can_bus->get_can_msg(msg_rx, &extended, &rtr, &error, this->error_code, timeout);
   }  
