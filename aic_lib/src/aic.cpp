@@ -3,7 +3,7 @@
 aic::aic(aic_comm_config_t aic_connection_parameters)
   : connection_parameters(aic_connection_parameters), aic_ok(false)
 {
-  this->reset();
+  this->connect();
 }
 
 aic::~aic()
@@ -13,14 +13,14 @@ aic::~aic()
 
 bool aic::shutdown(){
   this->motor->off();
-  this->brake->apply();
+  this->brake->apply();  
   return this->release();
 }
 
 bool aic::release(){
   this->motor->~aic_motor();
-  this->sensors->~aic_sensors();
   this->brake->~aic_brake();
+  this->sensors->~aic_sensors();
   this->connection->~aic_comm();
   return this->aic_ok = false;
 }
@@ -29,7 +29,7 @@ void aic::reset()
 {
   if (aic_ok == true){
     this->connection->send_command(AIC_RESET);
-    usleep(100);
+    usleep(10000);
     this->release();
   }
   this->connect();
@@ -38,16 +38,22 @@ void aic::reset()
 bool aic::connect()
 {
   aic_ok = false;
-  usleep(10000);
   this->connection = new aic_comm(this->connection_parameters);
+
   if (this->connection->status_ok() == true){
     this->brake = new aic_brake(this->connection);
     this->sensors = new aic_sensors(this->connection);
     this->motor = new aic_motor(this->connection);
+    /* Test ---------------------------------------*/
+//    this->reset();
+    this->connection->send_command(AIC_RESET);
+    usleep(10000);
+    /* --------------------------------------------*/
     this->motor->on();
     this->brake->release();
-    return aic_ok = true;
-  } else return aic_ok = false;
+    if(this->ping()==true) return aic_ok = true;
+    else return aic_ok = false;
+  }
 }
 
 void aic::set_controller_reference(double reference)
@@ -70,10 +76,14 @@ void aic::brake_off()
   this->brake->release();
 }
 
-void aic::ping()
+bool aic::ping()
 {
+  double displacement = 0;
+  int index = 0;
   this->connection->send_command(AIC_STATUS);
-  this->connection->get_status(AIC_STATUS);
+
+  if (this->connection->get_status(AIC_STATUS,&displacement, &index)) return true;
+  else return false;
 }
 
 aic_displacement_msg_t aic::read_displacement_sensors()

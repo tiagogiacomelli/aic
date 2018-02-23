@@ -12,8 +12,9 @@ public:
    aic(aic_comm_config_t aic_connection_parameters);
   ~aic();
 
-  void ping(void);
+  bool ping(void);
   void reset(void);
+  bool connect();
   void set_controller_reference(double reference);
   void set_motor_voltage(double voltage);
   void brake_on(void);
@@ -22,7 +23,6 @@ public:
   bool status_ok();
 
 private:
-  bool connect();
   bool shutdown();
   bool release();
   aic_comm_config_t connection_parameters;

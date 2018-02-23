@@ -18,12 +18,12 @@ aic_comm::~aic_comm()
 int aic_comm::send_command(int command, ...)
 {
   struct can_frame msg_tx;
-  msg_tx.can_id = can_bus->get_id_number() | (command << 5);
-//  std::cout << "MSG_ID: " << msg_tx.can_id << "\n" << std::endl;
-
-  msg_tx.can_dlc = 0;
-
-  for (int k = 0; k < 8; k++) msg_tx.data[k] = 0;
+  if (this->connection_parameters.aic_comm_device == socketcan)
+  {
+    msg_tx.can_id = can_bus->get_id_number() | (command << 5);
+    msg_tx.can_dlc = 0;
+    for (int k = 0; k < 8; k++) msg_tx.data[k] = 0;
+  }
 
   int err_code = 0;
 
@@ -93,13 +93,14 @@ int aic_comm::get_status(int command, ...)
   int i = 0;
   int idx = 0; float enc = 0;
   if (this->connection_parameters.aic_comm_device == rs232){
-      for(i=0;i<4;i++) ((unsigned char *)(&enc))[i]=((char *)(&buffer))[3-i];
-      for(i=0;i<4;i++) ((unsigned char *)(&idx))[i]=((char *)(&buffer))[7-i];
+      for(i=0;i<4;i++) ((char *)(&enc))[i]=((char *)(&buffer))[3-i];
+      for(i=0;i<4;i++) ((char *)(&idx))[i]=((char *)(&buffer))[7-i];
   } else {
     for(int i=0;i < 4;i++) ((unsigned char *)(&enc))[i]=msg_rx.data[3-i];
     for(int i=0;i < 4;i++) ((unsigned char *)(&idx))[i]=msg_rx.data[7-i];
   }
-  *encoder = (double) enc;
+  *encoder = enc;
+//  *encoder = enc;
   *index = idx;
   va_end(ap);
 
