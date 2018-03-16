@@ -3,10 +3,10 @@
 aic_sensors::aic_sensors(aic_comm *param_connection)
   : connection(param_connection) {}
 
-aic_sensors::~aic_sensors(){
+aic_sensors::~aic_sensors(void){
 }
 
-aic_displacement_msg_t aic_sensors::read_displacement()
+aic_displacement_msg_t aic_sensors::read_displacement(void)
 {
   double displacement = 0;
   int index = 0;

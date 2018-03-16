@@ -7,11 +7,11 @@ class aic_motor
 {
 public:
   aic_motor(aic_comm * param_connection);
-  ~aic_motor();
+  ~aic_motor(void);
   void on(void);
   void off(void);
-  double set_motor_voltage(double voltage);
-  double set_controller_reference(double voltage);
+  double set_motor_voltage(const double &voltage);
+  double set_controller_reference(const double &voltage);
 
 private:
   aic_comm * connection;

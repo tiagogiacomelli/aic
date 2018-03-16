@@ -7,7 +7,7 @@ class aic_brake
 {
 public:
   aic_brake(aic_comm *param_connection);
-  ~aic_brake();
+  ~aic_brake(void);
   void apply(void);
   void release(void);
 private:

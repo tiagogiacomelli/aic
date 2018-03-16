@@ -35,15 +35,15 @@ class aic_comm
 {
 public:
   aic_comm(aic_comm_config_t aic_connection_parameters);
-  ~aic_comm();
+  ~aic_comm(void);
   int send_command(int command,...);
   int get_status(int status,...);
-  bool status_ok();
+  bool status_ok(void);
 private:
   aic_comm_config_t connection_parameters;
 
-  int init();
-  int stop();
+  int init(void);
+  int stop(void);
 
   int error_code;
 

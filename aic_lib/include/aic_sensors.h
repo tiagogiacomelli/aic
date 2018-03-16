@@ -14,7 +14,7 @@ class aic_sensors
 {
 public:
   aic_sensors(aic_comm *param_connection);
-  ~aic_sensors();
+  ~aic_sensors(void);
   aic_displacement_msg_t read_displacement(void);
 private:
   aic_comm * connection;

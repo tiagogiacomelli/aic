@@ -10,7 +10,7 @@ aic_comm::aic_comm(aic_comm_config_t aic_connection_parameters)
   this->init();
 }
 
-aic_comm::~aic_comm()
+aic_comm::~aic_comm(void)
 {
   this->stop();
 }
@@ -107,7 +107,7 @@ int aic_comm::get_status(int command, ...)
   return command;
 }
 
-int aic_comm::init()
+int aic_comm::init(void)
 {
   if (this->connection_parameters.aic_comm_device == rs232)
     return aic_comm_status = serial_bus->init(connection_parameters.aic_serial_port.c_str(),
@@ -117,14 +117,14 @@ int aic_comm::init()
                                     error_code);
 }
 
-int aic_comm::stop()
+int aic_comm::stop(void)
 {
   if (this->connection_parameters.aic_comm_device == rs232) serial_bus->~aic_serial();
   else can_bus->~aic_can();
   return aic_comm_status = false;
 }
 
-bool aic_comm::status_ok()
+bool aic_comm::status_ok(void)
 {
   return aic_comm_status;
 }

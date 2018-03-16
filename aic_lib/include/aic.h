@@ -10,21 +10,21 @@ class aic
 {
 public:
    aic(aic_comm_config_t aic_connection_parameters);
-  ~aic();
+  ~aic(void);
 
   bool ping(void);
   void reset(void);
-  bool connect();
-  void set_controller_reference(double reference);
-  void set_motor_voltage(double voltage);
+  bool connect(void);
+  void set_controller_reference(const double &reference);
+  void set_motor_voltage(const double &voltage);
   void brake_on(void);
   void brake_off(void);
   aic_displacement_msg_t read_displacement_sensors(void);
-  bool status_ok();
+  bool status_ok(void);
 
 private:
-  bool shutdown();
-  bool release();
+  bool shutdown(void);
+  bool release(void);
   aic_comm_config_t connection_parameters;
   aic_comm * connection;
   aic_brake * brake;
