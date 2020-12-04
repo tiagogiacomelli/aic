@@ -1,2 +1,2 @@
-# ufrgs_aic
-LARoSE - UFRGS -> AIC LIBRARY FOR LINUX
+# actuator interface card (aic)
+AIC communication library for linux
