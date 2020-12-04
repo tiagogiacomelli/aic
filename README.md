@@ -1,2 +1,2 @@
-# actuator interface card (aic)
+# Actuator Interface Card (AIC)
 AIC communication library for linux
